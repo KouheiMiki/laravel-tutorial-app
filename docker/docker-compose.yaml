@@ -1,0 +1,33 @@
+version: '3'
+name: laravel-tutorial-todo
+services:
+  service:
+    container_name: laravel-tutorial-todo-service
+    hostname: laravel-tutorial-todo-service
+    build:
+      context: ./service
+      dockerfile: ./Dockerfile
+    depends_on:
+      - mysql
+    ports:
+      - 60021:80
+    volumes:
+      - ./service/nginx/nginx-site.conf:/etc/nginx/conf.d/nginx-site.conf
+      - ../service:/var/www/html
+  mysql:
+    image: mysql:latest
+    container_name: laravel-tutorial-todo-mysql
+    hostname: laravel-tutorial-todo-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: user
+      MYSQL_PASSWORD: passwrod
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    ports:
+      - 60022:3306
+    volumes:
+      - mysql:/var/lib/mysql
+volumes:
+  mysql:
