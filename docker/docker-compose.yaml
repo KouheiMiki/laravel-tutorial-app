@@ -12,7 +12,7 @@ services:
     ports:
       - 60021:80
     volumes:
-      - ./service/nginx/nginx-site.conf:/etc/nginx/conf.d/nginx-site.conf
+      - ./service/nginx/nginx-site.conf:/etc/nginx/sites-available/default.conf
       - ../service:/var/www/html
   mysql:
     image: mysql:latest
@@ -22,12 +22,18 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: laravel
       MYSQL_USER: user
-      MYSQL_PASSWORD: passwrod
+      MYSQL_PASSWORD: password
       TZ: 'Asia/Tokyo'
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
     ports:
       - 60022:3306
     volumes:
       - mysql:/var/lib/mysql
+  mailhog:
+    image: mailhog/mailhog
+    container_name: laravel-tutorial-todo-mailhog
+    hostname: laravel-tutorial-todo-mailhog
+    ports:
+      - 60023:8025
 volumes:
   mysql:
